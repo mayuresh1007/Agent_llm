@@ -26,7 +26,8 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 # from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-loader = WebBaseLoader('https://docs.smith.langchain.com/')
+loader = WebBaseLoader('https://python.langchain.com/docs/tutorials/rag/')
+# loader = WebBaseLoader('https://docs.smith.langchain.com/')
 docs = loader.load()
 # print(docs)
 # sys.exit()
@@ -48,9 +49,10 @@ retriever_tool = create_retriever_tool(retriever,"langsmith_search","Search fro 
 
 from langchain_community.utilities import ArxivAPIWrapper
 from langchain_community.tools import ArxivQueryRun
+
 arxiv_wrapper=ArxivAPIWrapper (top_k_results=1, doc_content_chars_max=250)
 arxiv=ArxivQueryRun(api_wrapper=arxiv_wrapper)
-arxiv.name
+print(arxiv.name)
 
 tools=[wiki,arxiv,retriever_tool]
 # print('tools\n',tools)
@@ -85,4 +87,30 @@ agent_executer=AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 # print(agent_executer)
 
-agent_executer.invoke({"input":"what is langsmith?"})
+# agent_executer.invoke({"input":"what is langsmith?"})
+agent_executer.invoke({"input":"give me how to do serach based on retrieved data based on user query in the form of documenst from vector db?"})
+
+
+'''python
+import numpy as np
+from your_vector_db import VectorDB  # Hypothetical vector database library
+from your_embedding_model import get_vector  # Hypothetical model to get vector representation
+
+# Step 1: Initialize your vector database
+db = VectorDB()
+
+# Step 2: User query
+user_query = "What are the benefits of vector databases?"
+
+# Step 3: Convert the user query into a vector
+query_vector = get_vector(user_query)
+
+# Step 4: Retrieve similar documents
+similar_docs = db.search(query_vector, top_k=10)  # Retrieve top 10 similar documents
+
+# Step 5: Rank and return results
+results = sorted(similar_docs, key=lambda x: x['similarity_score'], reverse=True)
+
+for doc in results:
+    print(f"Title: {doc['title']}, Similarity Score: {doc['similarity_score']}"
+'''
